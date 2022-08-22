@@ -41,6 +41,8 @@
   {{ end }}
   {{ with .CurrentSection.AlternativeOutputFormats.Get "print" }}
     <a id="print" href="{{ .Permalink | safeURL }}"><i class="fa fa-print fa-fw"></i> {{ T "print_entire_section" }}</a>
+
+    <dark-mode-toggle id="dark-mode-toggle-1" appearance="toggle"></dark-mode-toggle>
   {{ end }}
   </div>
 {{ end }}

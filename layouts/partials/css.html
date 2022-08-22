@@ -34,3 +34,6 @@
     <link rel="stylesheet" href="{{ $url }}"><!-- custom css added -->
   {{- end }}
 {{- end }}
+
+{{ $darkModeCss := resources.Get "scss/_dark.scss" |resources.ToCSS }}
+<link rel="stylesheet" href="{{ $darkModeCss.RelPermalink }}" media="(prefers-color-scheme: dark)">

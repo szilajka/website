@@ -104,3 +104,4 @@
 <script src="{{ "js/script.js" | relURL }}"></script>
 {{ with .Params.js }}{{ range (split . ",") }}<script src="{{ (trim . " ") | relURL }}"></script><!-- custom js added -->
 {{ end }}{{ else }}<!-- no custom js detected -->{{ end }}
+<script type="module" src="https://unpkg.com/dark-mode-toggle"></script>

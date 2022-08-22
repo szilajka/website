@@ -1,0 +1,87 @@
+@media (prefers-color-scheme: dark) {
+  $bg-color: #39404d;
+  $sidebar-color__hover: #3770d9;
+  $sidebar-color: #06bda6;
+  $sidebar-color-page: #83baf4;
+  $nav-item-border-bottom: #03e391;
+
+  body {
+    color: #83a9bf;
+    background-color: $bg-color;
+  }
+
+  .td-sidebar-nav a:hover {
+    color: $sidebar-color__hover;
+  }
+
+  .td-sidebar-nav__section-title a {
+    color: $sidebar-color;
+  }
+
+  .td-sidebar-nav .td-sidebar-link__page {
+    color: $sidebar-color-page;
+  }
+
+  .glossary-tooltip {
+    border-bottom: 1px dotted $nav-item-border-bottom;
+    color: #39aa90;
+  }
+
+  a:hover {
+    color: #94d2a1;
+  }
+
+  body a {
+    color: #5ab56c;
+  }
+
+  .td-toc #TableOfContents a {
+    color: #7abdb4;
+  }
+
+  .td-toc #TableOfContents a:hover {
+    color: #00ff87;
+  }
+
+  .flip-nav .td-navbar {
+    background-color: $bg-color !important;
+  }
+
+  .flip-nav .td-navbar .navbar-nav .nav-item .active,
+  .navbar-dark .navbar-nav .show > .nav-link,
+  .navbar-dark .navbar-nav .active > .nav-link,
+  .navbar-dark .navbar-nav .nav-link.show,
+  .navbar-dark .navbar-nav .nav-link.active {
+    color: #6472ac;
+  }
+
+  .flip-nav .td-navbar .navbar-nav .nav-item.show .nav-link,
+  .flip-nav .td-navbar .navbar-nav .nav-item .nav-link,
+  .navbar-dark .navbar-nav .nav-link {
+    color: #6472ac;
+  }
+
+  .flip-nav .td-navbar .navbar-nav .nav-item .active::after,
+  .td-navbar-nav-scroll .navbar-nav .nav-item .active::after {
+    background: #24991b;
+  }
+
+  .flip-nav .td-navbar .navbar-nav .nav-item.show .nav-link:hover,
+  .flip-nav .td-navbar .navbar-nav .nav-item .nav-link:hover,
+  .navbar-dark .navbar-nav .nav-link:hover,
+  .navbar-dark .navbar-nav .nav-link:focus {
+    color: #66c1c6;
+  }
+
+  figure.diagram-large {
+    background-color: #596a8c;
+  }
+
+  figure > figcaption {
+    color: #000;
+  }
+
+  section {
+    background-color: $bg-color;
+  }
+}

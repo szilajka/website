@@ -8,7 +8,7 @@ $NETLIFY_FUNC = "$NODE_BIN/netlify-lambda"
 $CURDIR = $PSScriptRoot
 $CONTAINER_ENGINE = "docker"
 $IMAGE_REGISTRY = "gcr.io/k8s-staging-sig-docs"
-$makeAndDockerfileStream = [IO.MemoryStream]::new([Text.Encoding]::UTF8.GetBytes($(Get-Content -Path Dockerfile, Makefile)))
+$makeAndDockerfileStream = [IO.MemoryStream]::new([Text.Encoding]::UTF8.GetBytes($(Get-Content -Path Dockerfile, Makefile -Raw)))
 $IMAGE_VERSION = $(Get-FileHash -InputStream $makeAndDockerfileStream -Algorithm SHA256).Hash.ToString().Substring(0, 12)
 $CONTAINER_IMAGE = "$IMAGE_REGISTRY/k8s-website-hugo:v$HUGO_VERSION-$IMAGE_VERSION"
 $CONTAINER_RUN = "$CONTAINER_ENGINE run --rm --interactive --tty --volume ""$($CURDIR):/src"""
@@ -78,7 +78,7 @@ function deploy-preview() {
 }
 
 function functions-build() {
-    . $NETLIFY_FUNC "build functions-src"
+    & $NETLIFY_FUNC build functions-src
 }
 
 function check-headers-file() {
@@ -114,7 +114,6 @@ function docker-build() {
     container-build
 }
 
-
 function docker-serve() {
     Write-Output "$CCRED**** The use of docker-serve is deprecated. Use container-serve instead. ****$CCEND"
     container-serve
@@ -122,10 +121,7 @@ function docker-serve() {
 
 ## container-image: Build a container image for the preview of the website
 function container-image() {
-    Invoke-Expression $CONTAINER_ENGINE build . `
-        --network=host `
-        --tag $CONTAINER_IMAGE `
-        --build-arg HUGO_VERSION=$HUGO_VERSION
+    & $CONTAINER_ENGINE build . --network=host --tag $CONTAINER_IMAGE --build-arg HUGO_VERSION=$HUGO_VERSION
 }
 
 ## container-push: Push container image for the preview of the website
@@ -136,15 +132,17 @@ function container-push() {
 
 function container-build() {
     module-check
-    Invoke-Expression $CONTAINER_RUN --read-only --mount type=tmpfs, destination=/tmp, tmpfs-mode=01777 $(CONTAINER_IMAGE) sh -c "npm ci && hugo --minify --environment development"
+    $command = "$CONTAINER_RUN --read-only --mount type=tmpfs,destination=/tmp,tmpfs-mode=01777 $CONTAINER_IMAGE sh -c ""npm ci && hugo --minify --environment development"""
+    Invoke-Expression $command
 }
 
 # no build lock to allow for read-only mounts
 ## container-serve: Boot the development server using container.
 function container-serve() {
     module-check
-    Invoke-Expression "$CONTAINER_RUN --cap-drop=ALL --cap-add=AUDIT_WRITE --read-only --mount type=tmpfs, destination=/tmp, tmpfs-mode=01777 -p 1313:1313 $CONTAINER_IMAGE `
-        hugo server --buildFuture --environment development --bind 0.0.0.0 --destination /tmp/hugo --cleanDestinationDir --noBuildLock"
+    $command = "$CONTAINER_RUN --cap-drop=ALL --cap-add=AUDIT_WRITE --read-only --mount type=tmpfs,destination=/tmp,tmpfs-mode=01777 -p 1313:1313 $CONTAINER_IMAGE " +
+    "hugo server --buildFuture --environment development --bind 0.0.0.0 --destination /tmp/hugo --cleanDestinationDir --noBuildLock"
+    Invoke-Expression $command
 }
 
 function test-examples() {
